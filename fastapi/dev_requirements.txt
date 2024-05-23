@@ -7,6 +7,3 @@ tiktoken
 pydantic-settings
 pytest
 requests
-
-# dev
-groq
