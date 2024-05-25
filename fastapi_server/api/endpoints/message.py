@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from clients import huggingface as huggingface_serverless_client
+from api import deps
 
 router = APIRouter()
 
@@ -10,6 +11,7 @@ class MessageCreate(BaseModel):
 @router.post("/message")
 async def create_message(
     *,
+    authorization: bool = Depends(deps.authorize),
     message: MessageCreate
 ):
     """
