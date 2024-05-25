@@ -7,3 +7,5 @@ tiktoken
 pydantic-settings
 pytest
 requests
+transformers
+#openllm[llama]
