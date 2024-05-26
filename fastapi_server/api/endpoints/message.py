@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from clients import huggingface as huggingface_serverless_client
+from clients import ollama as ollama_internal_client
 from api import deps
 
 router = APIRouter()
@@ -8,7 +8,10 @@ router = APIRouter()
 class MessageCreate(BaseModel):
     prompt: str
 
-@router.post("/message")
+class MessageResponse(BaseModel):
+    prediction: str
+
+@router.post("/message", response_model=MessageResponse)
 async def create_message(
     *,
     authorization: bool = Depends(deps.authorize),
@@ -60,14 +63,13 @@ Do you use recreational drugs? no
 - Allergies: penicillin, peanuts
 - Soc: tobacco since 16, not much. No alcohol. No recreational drugs
 """
-    
-    pre_prompt = f"{system_prompt}\n{sample_patient_prompt}\n{sample_assistant_prompt}"
 
-    prompt = f"{pre_prompt}\n\nPatient:\n{message.prompt}\n\nAssistant:"
+    final_system_prompt = f"{system_prompt}\n\nExample Case:\n{sample_patient_prompt}\n{sample_assistant_prompt}"
 
-    formatted_text = huggingface_serverless_client.predict(
-        prompt=prompt
-    )
+    prediction = await ollama_internal_client.agenerate([
+        { "role": "system", "content": final_system_prompt },
+        { "role": "user", "content": message.prompt },
+    ])
 
-    return { "prediction": formatted_text }
+    return { "prediction": prediction }
 
