@@ -3,6 +3,16 @@ import {Textarea} from '@/components/ui/textarea'
 import {Button} from '@/components/ui/button'
 import axios from 'axios'
 
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
+import { EditorContent, useEditor } from '@tiptap/react'
+
+import * as Y from 'yjs'
+import Collaboration from '@tiptap/extension-collaboration'
+
+import { TiptapCollabProvider } from '@hocuspocus/provider'
+
 function App() {
   const [content, setContent] = useState('')
   const [key, setKey] = useState(0)
@@ -42,6 +52,37 @@ function App() {
     }
   }
 
+  const doc = new Y.Doc() // Initialize Y.Doc for shared editing
+
+  // Connect to your Collaboration server
+  const provider = new TiptapCollabProvider({
+    name: "document.name", // Unique document identifier for syncing. This is your document name.
+    // appId: import.meta.env.VITE_TIPTAP_COLLAB_APP_ID, 
+    appId: '7j9y6m10', // Cloud Dashboard AppID 
+    token: 'notoken', // JWT token
+    document: doc,
+  })
+
+
+  const editor = useEditor({
+    extensions: [
+      Document,
+      Paragraph,
+      Text,
+      Collaboration.configure({
+        document: doc,
+      }),
+    ],
+    content: `
+      <p>
+        This is a radically reduced version of tiptap. It has support for a document, with paragraphs and text. That’s it. It’s probably too much for real minimalists though.
+      </p>
+      <p>
+        The paragraph extension is not really required, but you need at least one node. Sure, that node can be something different.
+      </p>
+    `,
+  })
+
   return (
     <>
       <div className="hidden h-full flex-col md:flex">
@@ -57,15 +98,16 @@ function App() {
         </div>
         <div className="flex-1">
           <div className="container h-full py-6">
-            <Textarea
-              key={key}
-              defaultValue={content}
-
-              className="min-h-[400px] flex-1 p-4 md:min-h-[700px] lg:min-h-[700px]"
-            />
+            {/* <Textarea */}
+            {/*   key={key} */}
+            {/*   defaultValue={content} */}
+            {/**/}
+            {/*   className="min-h-[400px] flex-1 p-4 md:min-h-[700px] lg:min-h-[700px]" */}
+            {/* /> */}
           </div>
         </div>
       </div>
+    <EditorContent editor={editor} className='ring-1 ring-gray-500' />
     </>
   )
 }
