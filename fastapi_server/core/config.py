@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: list = [os.getenv("CORS_ORIGIN")]
     ACCESS_TOKEN: str = os.getenv("ACCESS_TOKEN")
     OLLAMA_API_ENDPOINT: str = os.getenv("OLLAMA_API_ENDPOINT")
+    GRADIO_API_ENDPOINT: str = os.getenv("GRADIO_API_ENDPOINT")
 
     model_config = SettingsConfigDict(
         case_sensitive=True,

@@ -8,3 +8,4 @@ pydantic-settings
 pytest
 requests
 ollama
+gradio_client

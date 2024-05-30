@@ -6,11 +6,17 @@
 - Application #2 is run on a home server.
 
 ### Overview
-- Application #1 performs OCR on medical documents and extract text.
-- Application #1 makes an API call to Application #2 with the extracted text.
-- Application #2 processes the text with LLM and returns a JSON response.
-- Application #1 receives the JSON response and displays it to the user.
-  - Unsure: If no database is used, do we need to broadcast the JSON response using pubsub?
+- `medicalcharting/`: React frontend.
+- `MiniCPM-Llama3-V-2_5/`: Gradio app that performs Handwritten Text Recognition. It accepts an image and extracts text from it.
+- `fastapi_server/`: Handles communications between `MiniCPM-Llama3-V-2_5`, ollama and the React frontend.
+- Ollama: A CLI tool. Handles LLM inference.
+
+### Experiments
+- Handwritten Text Recognition:
+  - `githubharald/HTRPipeline`: Not good
+  - `llava:34b`: Doesn't work at all. I suspect more because ollama is not able to access the file at all.
+  - `MiniCPM-Llama3-V-2_5`: Really good. Better than `harshit543/Handwritten-Text-Recognition`. Works well on Gradio, but unable to read image when used with ollama.
 
 ### Quickstart
+- Look inside each directory for instructions.
 
