@@ -12,6 +12,9 @@ import Collaboration from '@tiptap/extension-collaboration'
 
 import { TiptapCollabProvider } from '@hocuspocus/provider'
 
+import FileUploadDropzone from '@/components/custom/file-upload-dropzone'
+import {Toaster} from 'sonner'
+
 function App() {
   const [text, setText] = useState('')
 
@@ -102,14 +105,21 @@ function App() {
               </Button>
               <Button onClick={handleClick}>Set Content</Button>
             </div>
-
           </div>
+
+          <div className="flex-1 py-16">
+            <div className="container h-full py-6">
+              <FileUploadDropzone />
+            </div>
+          </div>
+
           <div className="flex-1">
             <div className="container h-full py-6">
               <EditorContent editor={editor} className='ring-1 ring-gray-500 rounded-lg lg:h-[500px] md:h-[500px] sm:h-[300px] h-[300px]' />
             </div>
           </div>
         </div>
+        <Toaster />
       </>
     )
   }

@@ -8,6 +8,8 @@ import re
 import torch
 import argparse
 from transformers import AutoModel, AutoTokenizer
+from loguru import logger
+from typing import Any
 
 # README, How to run demo on different devices
 
@@ -133,15 +135,38 @@ def create_component(params, comp='Slider'):
         )
 
 #@spaces.GPU(duration=120)
-def chat(img, msgs, ctx, params=None, vision_hidden_states=None):
-    default_params = {"stream": False, "sampling": False, "num_beams":3, "repetition_penalty": 1.2, "max_new_tokens": 1024}
+# def chat(img, msgs, ctx, params=None, vision_hidden_states=None):
+
+def chat(
+    img, 
+    msgs, 
+    ctx,
+    params=None,
+    vision_hidden_states=None,
+):
+
+    default_params = {
+        "stream": False,
+        "sampling": False,
+        "num_beams":3,
+        "repetition_penalty": 1.2,
+        "max_new_tokens": 1024,
+    }
     if params is None:
         params = default_params
     if img is None:
         yield "Error, invalid image, please upload a new image"
     else:
         try:
+            logger.info(f"img: {img}")
+
             image = img.convert('RGB')
+
+            logger.info(f"type(img.convert('RGB')): {type(image)}")
+            logger.info(f"msgs: {msgs}")
+            logger.info(f"tokenizer: {tokenizer}")
+            logger.info(f"params: {params}")
+
             answer = model.chat(
                 image=image,
                 msgs=msgs,
@@ -163,19 +188,37 @@ def chat(img, msgs, ctx, params=None, vision_hidden_states=None):
             yield ERROR_MSG
 
 
-def upload_img(image, _chatbot, _app_session):
+def upload_img(
+    image,
+    _chatbot,
+    _app_session: dict[str, Any]
+) -> tuple:
+
     image = Image.fromarray(image)
 
     _app_session['sts']=None
     _app_session['ctx']=[]
     _app_session['img']=image 
     _chatbot.append(('', 'Image uploaded successfully, you can talk to me now'))
+
     return _chatbot, _app_session
 
 
-def respond(_chat_bot, _app_cfg, params_form, num_beams, repetition_penalty, repetition_penalty_2, top_p, top_k, temperature):
+def respond(
+    _chat_bot: list[str],
+    _app_cfg: dict,
+    params_form: str,
+    num_beams: int,
+    repetition_penalty: float,
+    repetition_penalty_2: float,
+    top_p: float,
+    top_k: int,
+    temperature: float,
+):
+
     _question = _chat_bot[-1][0]
     print('<Question>:', _question)
+
     if _app_cfg.get('ctx', None) is None:
         _chat_bot[-1][1] = 'Please upload an image to start'
         yield (_chat_bot, _app_cfg)
@@ -231,7 +274,12 @@ def regenerate_button_clicked(_question, _chat_bot, _app_cfg):
     # return respond(_chat_bot, _app_cfg, params_form, num_beams, repetition_penalty, repetition_penalty_2, top_p, top_k, temperature)
 
 
-def clear_button_clicked(_question, _chat_bot, _app_cfg, _bt_pic):
+def clear_button_clicked(
+    _question: str,
+    _chat_bot: list[str],
+    _app_cfg: dict,
+    _bt_pic
+):
     _chat_bot.clear()
     _app_cfg['sts'] = None
     _app_cfg['ctx'] = None

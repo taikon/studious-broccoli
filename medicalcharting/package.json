@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@hocuspocus/provider": "^2.13.0",
+    "@hookform/resolvers": "^3.4.2",
+    "@radix-ui/react-aspect-ratio": "^1.0.3",
+    "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@tiptap/extension-collaboration": "^2.4.0",
     "@tiptap/extension-document": "^2.4.0",
@@ -24,9 +27,13 @@
     "lucide-react": "^0.379.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-hook-form": "^7.51.5",
+    "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
-    "yjs": "^13.6.15"
+    "yjs": "^13.6.15",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.46.2",
