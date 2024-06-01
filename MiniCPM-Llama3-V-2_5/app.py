@@ -9,7 +9,7 @@ import torch
 import argparse
 from transformers import AutoModel, AutoTokenizer
 from loguru import logger
-from typing import Any
+from typing import Any, Optional
 
 # README, How to run demo on different devices
 
@@ -28,6 +28,7 @@ assert device in ['cuda', 'mps']
 
 # Load model
 model_path = 'openbmb/MiniCPM-Llama3-V-2_5'
+
 if 'int4' in model_path:
     if device == 'mps':
         print('Error: running int4 model with bitsandbytes on Mac is not supported right now.')
@@ -36,7 +37,9 @@ if 'int4' in model_path:
 else:
     model = AutoModel.from_pretrained(model_path, trust_remote_code=True).to(dtype=torch.float16)
     model = model.to(device=device)
+
 tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+
 model.eval()
 
 
@@ -138,9 +141,9 @@ def create_component(params, comp='Slider'):
 # def chat(img, msgs, ctx, params=None, vision_hidden_states=None):
 
 def chat(
-    img, 
-    msgs, 
-    ctx,
+    img: Optional[Image.Image],
+    msgs: list[str],
+    ctx: list[str],
     params=None,
     vision_hidden_states=None,
 ):
@@ -152,8 +155,10 @@ def chat(
         "repetition_penalty": 1.2,
         "max_new_tokens": 1024,
     }
+
     if params is None:
         params = default_params
+
     if img is None:
         yield "Error, invalid image, please upload a new image"
     else:
