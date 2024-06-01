@@ -9,3 +9,4 @@ pytest
 requests
 ollama
 gradio_client
+pillow
