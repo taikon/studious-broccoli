@@ -64,6 +64,7 @@ const FileUploadDropzone = () => {
     try {
       const response = await fetch(uploadUrl, {
         method: "POST",
+        headers: { Authorization: "Bearer " + import.meta.env.VITE_FASTAPI_SERVER_ACCESS_TOKEN },
         body: formData,
       });
 
