@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel
 import clients.ollama as ollama_internal_client
-import clients.gradio as gradio_internal_client
+#import clients.gradio as gradio_internal_client
 from api import deps
 from io import BytesIO
 from PIL import Image
@@ -102,7 +102,7 @@ async def create_upload(
         file_bytes_stream = BytesIO(file_bytes)
 
         # Convert the stream to a PIL image object
-        image = Image.open(file_bytes_stream)
+        image = Image.open(file_bytes_stream).convert("RGB")
 
         model = ocr.load_model()
 
