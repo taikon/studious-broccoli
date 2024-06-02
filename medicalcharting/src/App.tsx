@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import {Button} from '@/components/ui/button'
 import axios from 'axios'
 
 import Document from '@tiptap/extension-document'
@@ -13,12 +12,10 @@ import Collaboration from '@tiptap/extension-collaboration'
 import { TiptapCollabProvider } from '@hocuspocus/provider'
 
 import FileUploadDropzone from '@/components/custom/file-upload-dropzone'
-import {Toaster} from 'sonner'
-import FileUploadButton from '@/components/custom/file-upload-button'
+import {Button} from '@/components/ui/button'
+import { Toaster, toast } from "sonner";
 
 function App() {
-  const [text, setText] = useState('')
-
   function handleClear() {
     if (!editor) {
       return
@@ -28,7 +25,7 @@ function App() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleCreateMessage() {
+  async function handleCreateMessage(text: string) {
     if (!editor) {
       return
     }
@@ -51,8 +48,11 @@ function App() {
         { headers }
       )
 
-      if (response.data) {
+      if (response.status === 200 || response.status === 201) {
         editor.commands.setContent(response.data.prediction)
+        toast.success("Message created successfully");
+      } else {
+        toast.error("Failed to create message");
       }
     } catch (error) {
       console.error(error)
@@ -61,7 +61,55 @@ function App() {
     }
   }
 
-  const doc = new Y.Doc() // Initialize Y.Doc for shared editing
+
+  const [files, setFiles] = useState([]);
+
+  function handleFileChange(event) {
+    setFiles(Array.from(event.target.files));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!editor) {
+      return
+    }
+
+    setIsSubmitting(true); // Disable button when the POST request starts
+    toast.info("Processing data");
+    const uploadUrl = import.meta.env.VITE_FASTAPI_SERVER_API_BASE_URL + '/api/upload'
+    const authorization = "Bearer " + import.meta.env.VITE_FASTAPI_SERVER_ACCESS_TOKEN;
+
+    const formData = new FormData();
+
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    try {
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { 
+          Authorization: authorization,
+        },
+        body: formData
+      });
+
+      if (response.status === 200) {
+        const result = await response.json();
+        const prediction = result.prediction;
+        toast.success("File uploaded successfully, starting summarization");
+        handleCreateMessage(prediction);
+      } else {
+        toast.error("Failed to upload file");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // Initialize Y.Doc for shared editing
+  const doc = new Y.Doc() 
 
   // Connect to your Collaboration server
   const provider = new TiptapCollabProvider({
@@ -85,7 +133,7 @@ function App() {
     `,
   })
 
-  function handleClick() {
+  function handleResetContent() {
     if (!editor) {
       return
     }
@@ -101,10 +149,7 @@ function App() {
             <h2 className="text-lg font-semibold">Application</h2>
             <div className="ml-auto flex w-full space-x-2 sm:justify-end">
               <Button onClick={handleClear}>Clear</Button>
-              <Button onClick={handleCreateMessage} disabled={isSubmitting}>
-                {isSubmitting ? "Creating..." : "Create Message"}
-              </Button>
-              <Button onClick={handleClick}>Set Content</Button>
+              <Button onClick={handleResetContent}>Set Content</Button>
             </div>
           </div>
 
@@ -116,7 +161,23 @@ function App() {
 
           <div className="flex-1 py-16">
             <div className="container h-full py-6">
-              <FileUploadButton />
+
+              <div>
+                <form onSubmit={handleSubmit}>
+                  <input type="file" multiple onChange={handleFileChange} />
+                  <Button type="submit">Upload</Button>
+                </form>
+                {files.length > 0 && (
+                  <div>
+                    <ul>
+                      {files.map((file) => (
+                        <li key={file.name}>{file.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+
             </div>
           </div>
 
@@ -132,4 +193,4 @@ function App() {
   }
 }
 
-export default App
+export default App;
