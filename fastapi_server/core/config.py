@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     OLLAMA_API_ENDPOINT: str = os.getenv("OLLAMA_API_ENDPOINT")
     GRADIO_API_ENDPOINT: str = os.getenv("GRADIO_API_ENDPOINT")
 
+    # OCR Settings
+    OCR_MODEL: str = 'openbmb/MiniCPM-Llama3-V-2_5'
+    DEVICE: str = 'cuda'
+
     model_config = SettingsConfigDict(
         case_sensitive=True,
         env_file=".env", 

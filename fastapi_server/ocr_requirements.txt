@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+loguru
+tiktoken
+pydantic-settings
+pytest
+requests
+ollama
+gradio_client
+pillow
+torch
+torchvision
+transformers
+sentencepiece
+opencv-python
