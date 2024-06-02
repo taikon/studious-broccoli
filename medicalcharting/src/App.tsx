@@ -14,6 +14,7 @@ import { TiptapCollabProvider } from '@hocuspocus/provider'
 
 import FileUploadDropzone from '@/components/custom/file-upload-dropzone'
 import {Toaster} from 'sonner'
+import FileUploadButton from '@/components/custom/file-upload-button'
 
 function App() {
   const [text, setText] = useState('')
@@ -110,6 +111,12 @@ function App() {
           <div className="flex-1 py-16">
             <div className="container h-full py-6">
               <FileUploadDropzone />
+            </div>
+          </div>
+
+          <div className="flex-1 py-16">
+            <div className="container h-full py-6">
+              <FileUploadButton />
             </div>
           </div>
 
