@@ -80,7 +80,7 @@ async def create_upload(
     *,
     authorization: bool = Depends(deps.authorize),
     files: list[UploadFile],
-    prompt: str = "Transcribe the text from the image. Do not write anything other than the text."
+    #prompt: str = "Transcribe the text from the image. Do not write anything other than the text."
 ):
     """
     Accepts a list of images containing handwritten text, and returns the transcribed text.
@@ -91,6 +91,8 @@ async def create_upload(
     Returns:
     - {"prediction": prediction}
     """
+
+    prompt: str = "Transcribe the text from the image. Do not write anything other than the text."
 
     prediction = ""
 

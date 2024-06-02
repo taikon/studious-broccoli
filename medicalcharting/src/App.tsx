@@ -32,7 +32,7 @@ function App() {
 
     setIsSubmitting(true); // Disable button when the POST request starts
 
-    const createMessageUrl = import.meta.env.VITE_FASTAPI_SERVER_API_BASE_URL + '/api/messages'
+    const createMessageUrl = import.meta.env.VITE_FASTAPI_SERVER_API_BASE_URL + '/api/message'
 
     const headers = {
       "Content-Type": "application/json",
