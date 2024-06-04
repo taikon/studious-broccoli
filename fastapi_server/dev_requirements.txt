@@ -10,3 +10,4 @@ requests
 ollama
 gradio_client
 pillow
+markdown

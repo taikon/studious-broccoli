@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from pydantic import BaseModel
 import clients.ollama as ollama_internal_client
-#import clients.gradio as gradio_internal_client
 from api import deps
 from io import BytesIO
 from PIL import Image
 from ml import ocr
+from markdown import markdown
 from loguru import logger
 
 router = APIRouter()
@@ -23,10 +23,11 @@ async def create_message(
     message: MessageCreate
 ):
     """
-    Accepts unformatted text from the patient, and returns a formatted SOAP note.
+    Accepts unformatted text from the patient, and returns a clean SOAP note in HTML format.
+    HTML format is used because the frontend is rendering it in Tiptap.
 
     Arguments:
-    - prompt: The patient's unformatted text.
+    - prompt: The intake form filled out by the patient.
 
     Returns:
     - {"prediction": formatted_text}
@@ -42,7 +43,7 @@ async def create_message(
 - Soc:
 - If a medication isn't explainable by the PMHx or PSHx, put a star (*) next to it.
 """
-    sample_patient_prompt = """Patient: 
+    sample_patient_prompt = """### Patient: 
 What problem brought you in today? headache. It's on the left side of my head. It's a sharp pain. It's worse when I move my head. Nausea, sensitive to bright light.
 How long have you had this problem? since yesterday
 Do you have any medical problems? high blood pressure, arthritis, asthma
@@ -55,7 +56,7 @@ Do you use alcohol? no
 Do you use recreational drugs? no
 """
 
-    sample_assistant_prompt = """Assistant:
+    sample_assistant_prompt = """### Assistant:
 - headache since yesterday
 - left side, sharp pain, worse with movement
 - nausea, light sensitivity
@@ -72,6 +73,8 @@ Do you use recreational drugs? no
         { "role": "system", "content": final_system_prompt },
         { "role": "user", "content": message.prompt },
     ])
+
+    prediction = markdown(prediction)
 
     return { "prediction": prediction }
 
@@ -125,8 +128,6 @@ async def create_upload(
             raise HTTPException(
                 status_code=500, detail=f"Model inference failed: {str(e)}"
             )
-
-        logger.info(f"chunk: {chunk}")
 
         prediction += chunk
 
