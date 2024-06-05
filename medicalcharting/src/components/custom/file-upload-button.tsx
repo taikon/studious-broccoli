@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Button} from "@/components/ui/button";
+import { toast } from "sonner";
 
 function FileUploadButton() {
   const [files, setFiles] = useState([]);
@@ -10,6 +11,7 @@ function FileUploadButton() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    toast.info("Processing data");
 
     const uploadUrl = import.meta.env.VITE_FASTAPI_SERVER_API_BASE_URL + '/api/upload'
     const authorization = "Bearer " + import.meta.env.VITE_FASTAPI_SERVER_ACCESS_TOKEN;
@@ -31,9 +33,10 @@ function FileUploadButton() {
 
       if (response.status === 200) {
         const result = await response.json();
-        console.log(`File uploaded successfully: ${result}`);
+        const prediction = result.prediction;
+        toast.success("File uploaded successfully");
       } else {
-        console.error("Failed to upload file");
+        toast.error("Failed to upload file");
       }
     } catch (error) {
       console.error(error);
@@ -41,7 +44,7 @@ function FileUploadButton() {
   }
 
   return (
-    <div className="ring">
+    <div>
       <form onSubmit={handleSubmit}>
         <input type="file" multiple onChange={handleFileChange} />
         <Button type="submit">Upload</Button>
