@@ -8,14 +8,13 @@ import { DropzoneOptions } from "react-dropzone";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-import { Paperclip, Send } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import axios from "axios";
 
 const CardForm = z.object({
   message: z.string(),
@@ -83,8 +82,6 @@ const FileUploadDropzone = () => {
       console.error(error);
     }
   }
-
-  console.log(form.getValues("files"));
 
   return (
     <Form {...form}>

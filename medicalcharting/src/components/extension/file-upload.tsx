@@ -23,7 +23,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 type DirectionOptions = "rtl" | "ltr" | undefined;
 
-type FileUploaderContextType = {
+interface FileUploaderContextType {
   dropzoneState: DropzoneState;
   isLOF: boolean;
   isFileTooBig: boolean;
@@ -32,7 +32,7 @@ type FileUploaderContextType = {
   setActiveIndex: Dispatch<SetStateAction<number>>;
   orientation: "horizontal" | "vertical";
   direction: DirectionOptions;
-};
+}
 
 const FileUploaderContext = createContext<FileUploaderContextType | null>(null);
 
@@ -44,13 +44,13 @@ export const useFileUpload = () => {
   return context;
 };
 
-type FileUploaderProps = {
+interface FileUploaderProps {
   value: File[] | null;
   reSelect?: boolean;
   onValueChange: (value: File[] | null) => void;
   dropzoneOptions: DropzoneOptions;
   orientation?: "horizontal" | "vertical";
-};
+}
 
 export const FileUploader = forwardRef<
   HTMLDivElement,

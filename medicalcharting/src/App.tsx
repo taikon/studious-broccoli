@@ -23,14 +23,10 @@ function App() {
     editor.commands.clearContent()
   }
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   async function handleCreateMessage(text: string) {
     if (!editor) {
       return
     }
-
-    setIsSubmitting(true); // Disable button when the POST request starts
 
     const createMessageUrl = import.meta.env.VITE_FASTAPI_SERVER_API_BASE_URL + '/api/message'
 
@@ -56,26 +52,26 @@ function App() {
       }
     } catch (error) {
       console.error(error)
-    } finally {
-      setIsSubmitting(false); // Enable button when the POST request ends
     }
   }
 
+  const [files, setFiles] = useState<File[]>([]);
 
-  const [files, setFiles] = useState([]);
-
-  function handleFileChange(event) {
-    setFiles(Array.from(event.target.files));
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    if (event.target.files !== null){
+      setFiles(Array.from(event.target.files));
+    } else {
+      setFiles([]); // Handle null case
+    }
   }
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
     if (!editor) {
       return
     }
 
-    setIsSubmitting(true); // Disable button when the POST request starts
     toast.info("Processing data");
     const uploadUrl = import.meta.env.VITE_FASTAPI_SERVER_API_BASE_URL + '/api/upload'
     const authorization = "Bearer " + import.meta.env.VITE_FASTAPI_SERVER_ACCESS_TOKEN;
@@ -112,7 +108,8 @@ function App() {
   const doc = new Y.Doc() 
 
   // Connect to your Collaboration server
-  const provider = new TiptapCollabProvider({
+  // @ts-ignore
+  const provider = new TiptapCollabProvider({ 
     name: "document.name",
     appId: import.meta.env.VITE_TIPTAP_COLLAB_APP_ID, 
     token: import.meta.env.VITE_TIPTAP_JWT,
