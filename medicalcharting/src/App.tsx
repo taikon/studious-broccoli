@@ -150,11 +150,11 @@ function App() {
             </div>
           </div>
 
-          <div className="flex-1 py-16">
-            <div className="container h-full py-6">
-              <FileUploadDropzone />
-            </div>
-          </div>
+          {/* <div className="flex-1 py-16"> */}
+          {/*   <div className="container h-full py-6"> */}
+          {/*     <FileUploadDropzone /> */}
+          {/*   </div> */}
+          {/* </div> */}
 
           <div className="flex-1 py-16">
             <div className="container h-full py-6">
