@@ -11,7 +11,6 @@ import Collaboration from '@tiptap/extension-collaboration'
 
 import { TiptapCollabProvider } from '@hocuspocus/provider'
 
-import FileUploadDropzone from '@/components/custom/file-upload-dropzone'
 import {Button} from '@/components/ui/button'
 import { Toaster, toast } from "sonner";
 
@@ -83,17 +82,17 @@ function App() {
     });
 
     try {
-      const response = await fetch(uploadUrl, {
+      const response = await axios.post(uploadUrl, formData, {
         method: "POST",
         headers: { 
           Authorization: authorization,
+          'Content-Type': 'multipart/form-data',
         },
-        body: formData
+        data: formData
       });
 
       if (response.status === 200) {
-        const result = await response.json();
-        const prediction = result.prediction;
+        const prediction = response.data.prediction;
         toast.success("File uploaded successfully, starting summarization");
         handleCreateMessage(prediction);
       } else {

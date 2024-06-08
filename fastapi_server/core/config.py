@@ -10,7 +10,9 @@ ROOT_PATH = pathlib.Path(__file__).resolve().parent.parent
 
 class Settings(BaseSettings):
     ENVIRONMENT: str = os.getenv("ENVIRONMENT")
-    CORS_ORIGINS: list = [os.getenv("CORS_ORIGIN")]
+    CORS_ORIGINS: list = [
+        os.getenv("CORS_ORIGIN_REACT"),
+    ]
     ACCESS_TOKEN: str = os.getenv("ACCESS_TOKEN")
     OLLAMA_API_ENDPOINT: str = os.getenv("OLLAMA_API_ENDPOINT")
     GRADIO_API_ENDPOINT: str = os.getenv("GRADIO_API_ENDPOINT")

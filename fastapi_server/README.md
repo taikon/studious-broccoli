@@ -48,6 +48,12 @@
   ./run.sh
   ```
 
+- Run Cloudflare tunnel
+  ```bash
+  tmux new -s fastapi_cloudflare
+  fastapi_cloudflare:~$ ./api_cloudflare.sh
+  ```
+
 ### Usage
 - Go to `http://localhost:8000/redoc` and `http://localhost:8000/docs` to see the API reference and interactive API documentation, respectively.
 - The interactive API docs require you click the `Authorize` button and input the `ACCESS_TOKEN` when making requests. Do not put the `Bearer` prefix in the input field when testing API endpoints within the interactive API docs directly.

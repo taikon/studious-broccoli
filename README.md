@@ -16,5 +16,34 @@
     - This has been integrated into `fastapi_server`
 
 ### Quickstart
-- Look inside each directory for instructions.
+- Run ollama in background on default port 11434
+  ```bash
+  tmux new -s ollama
+  ollama:~$ chmod +x ollama.sh
+  ollama:~$ ./ollama.sh
+  ```
 
+- Run the FastAPI server
+  ```bash
+  ./run.sh
+  ```
+
+- Run Cloudflare tunnel for FastAPI server
+  ```bash
+  tmux new -s fastapi_cloudflare
+  fastapi_cloudflare:~$ ./api_cloudflare.sh
+  ```
+
+- Run React frontend on port 8188.
+  ```bash
+  pnpm run build
+  pnpm run preview --port 4173
+  ```
+
+- Run Cloudflare tunnel for React frontend
+  ```bash
+  tmux new -s react_cloudflare
+  react_cloudflare:~$ ./dashboard_cloudflare.sh
+  ```
+
+- Go to `dashboard.<domain-name>.com`

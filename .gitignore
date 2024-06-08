@@ -167,3 +167,5 @@ cython_debug/
 tmp/
 ngrok.sh
 cloudflare.sh
+api_cloudflare.sh
+dashboard_cloudflare.sh

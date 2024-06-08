@@ -11,3 +11,8 @@ ollama
 gradio_client
 pillow
 markdown
+torch
+torchvision
+transformers
+sentencepiece
+opencv-python
