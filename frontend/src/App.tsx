@@ -61,7 +61,8 @@ function App() {
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>): void {
     if (event.target.files !== null){
-      setFiles(Array.from(event.target.files));
+      // setFiles(Array.from(event.target.files));
+      setFiles(prevFiles => [...prevFiles, ...Array.from(event.target.files)]);
     } else {
       setFiles([]); // Handle null case
     }
@@ -166,8 +167,9 @@ function App() {
                   <Input 
                     type="file" 
                     multiple 
-                    accept='image/*'
+                    accept="image/*"
                     onChange={handleFileChange} 
+                    capture="environment"
                     className='hover:bg-neutral-100 outline-dashed outline-1 outline-white rounded-lg cursor-pointer'
                   />
                   <Button type="submit">Summarize</Button>
@@ -176,8 +178,8 @@ function App() {
               {files.length > 0 && (
                 <div>
                   <ul>
-                    {files.map((file) => (
-                      <li key={file.name}>{file.name}</li>
+                    {files.map((file, index) => (
+                      <li key={index}>{file.name}</li>
                     ))}
                   </ul>
                 </div>
