@@ -1,4 +1,4 @@
-# Medical Charting App (Upperbound)
+# Medical Charting App
 
 ### Introduction
 - There are 2 directories in this project, `frontend` and `backend`.
@@ -24,8 +24,8 @@
   - `transformers`: Slow. Takes ~10 seconds to process a single page of text.
   - `ollama`: Fast. Takes ~1 second to process a single page of text.
 
-## Quickstart
-### Quickstart - Ollama
+## Getting Started
+### Getting Started - Ollama
 - Install [ollama](https://github.com/ollama/ollama)
   ```bash
   curl -fsSL https://ollama.com/install.sh | sh
@@ -45,7 +45,7 @@
   llama3:~$ exit
   ```
 
-### Quickstart - FastAPI
+### Getting Started - FastAPI
 - Setup FastAPI environment variables. The `.env.example` file has `OLLAMA_API_ENDPOINT` set to the default port 11434.
   ```bash
   cd backend
@@ -79,7 +79,7 @@
   fastapi_cloudflare:~$ ./backend_cloudflare.sh
   ```
 
-### Quickstart - React
+### Getting Started - React
 - Setup React environment variables manually.
   ```bash
   cd frontend
@@ -112,3 +112,14 @@
   ```
 
 - Go to `dashboard.<domain-name>.com`. The backend is hosted at `api.<domain-name>.com`.
+
+### Restarting Application
+- This section requires you to have already run through [Getting Started](getting-started) at least once.
+- Start all application processes.
+  ```bash
+  ./run.sh
+  ```
+- Gracefully stop the application.
+  ```bash
+  tmux kill-server
+  ```
