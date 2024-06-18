@@ -1,7 +1,8 @@
 # Medical Charting App (Upperbound)
 
 ### Introduction
-- There are 2 applications in this project, both run on a home server.
+- There are 2 directories in this project, `frontend` and `backend`.
+- The backend requires the `ollama` CLI tool to serve llama3 7B.
 
 ### Overview
 - `frontend/`: React frontend.
@@ -9,7 +10,7 @@
   - It communicates with ollama and the React frontend. 
   - It uses the `openbmb/MiniCPM-Llama3-V-2_5` vision model for handwritten text recognition.
 - `ollama`: A CLI tool to serve ML models.
-  - It is used to summarize and format the medical chart text.
+  - This is used to summarize and format the medical chart text.
 
 ### Experiments
 - Handwritten Text Recognition:
@@ -17,7 +18,7 @@
   - `llava:34b`: Doesn't work at all. I suspect more because ollama is not able to access the file at all.
   - `harshit543/Handwritten-Text-Recognition`: It's okay. It works but can misinterpret maybe ~10% of the text. It's not good enough for production. 
   - `MiniCPM-Llama3-V-2_5`: Really good. Better than `harshit543/Handwritten-Text-Recognition`. Works well on Gradio, but unable to read image when used with ollama.
-    - This has been integrated into `backend`
+    - This has been integrated into the FastAPI backend.
 
 - Model Inference:
   - `transformers`: Slow. Takes ~10 seconds to process a single page of text.
@@ -75,7 +76,7 @@
 - Run Cloudflare tunnel for FastAPI backend
   ```bash
   tmux new -s fastapi_cloudflare
-  fastapi_cloudflare:~$ ./api_cloudflare.sh
+  fastapi_cloudflare:~$ ./backend_cloudflare.sh
   ```
 
 ### Quickstart - React
@@ -85,29 +86,16 @@
   cp .env.example .env
   vim .env
   ```
-  - Set `VITE_FASTAPI_SERVER_ACCESS_TOKEN` to `ACCESS_TOKEN` from `backend/.env`.
   - Set `VITE_FASTAPI_SERVER_API_BASE_URL` to `https://api.<domain-name>.com`.
+  - Set `VITE_TIPTAP_JWT` to the "Authentication" value in Tiptap dashboard settings.
+  - Set `VITE_TIPTAP_COLLAB_APP_ID` to the "App ID" in the Tiptap dashboard.
+  - Set `VITE_FASTAPI_SERVER_ACCESS_TOKEN` to `ACCESS_TOKEN` from `backend/.env`.
 
 - Install dependencies.
   ```bash
   cd frontend
   pnpm install
   ```
-
-  - If you try to run `pnpm run dev` for development, you'll likely get a @/lib/utils path error. If this happens, you need to initialize `shadcn-ui`.
-    ```bash
-    pnpm dlx shadcn-ui@latest init 
-
-    Would you like to use TypeScript (recommended)? yes
-    Which style would you like to use? › Default
-    Which color would you like to use as base color? › Slate
-    Where is your global CSS file? › › src/index.css
-    Do you want to use CSS variables for colors? › yes
-    Where is your tailwind.config.js located? › tailwind.config.js
-    Configure the import alias for components: › @/components
-    Configure the import alias for utils: › @/lib/utils
-    Are you using React Server Components? › no
-    ```
 
 - Run React frontend on port 4173.
   ```bash
@@ -120,7 +108,7 @@
 - Run Cloudflare tunnel for React frontend
   ```bash
   tmux new -s react_cloudflare
-  react_cloudflare:~$ ./dashboard_cloudflare.sh
+  react_cloudflare:~$ ./frontend_cloudflare.sh
   ```
 
-- Go to `dashboard.<domain-name>.com`
+- Go to `dashboard.<domain-name>.com`. The backend is hosted at `api.<domain-name>.com`.

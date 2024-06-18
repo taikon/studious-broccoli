@@ -1,7 +1,7 @@
-# Medical Charting App - FastAPI Server
+# Medical Charting App - FastAPI Backend
 
 ### Introduction
-- This sets up the LLM portion of the medical-charting-app. 
+- FastAPI backend for the medical-charting-app.
 - This server uses FastAPI and will run on a home server. FastAPI will communicate with the Ollama API, which is also run on the home server.
 - It makes use of the Ollama API because it's significantly faster vs `transformers` pipeline.
 - To make API requests to the FastAPI server, you must include an Authorization Bearer token formatted as `f"Bearer {ACCESS_TOKEN}"`. The `ACCESS_TOKEN` is retrieved from the environment variable. Combining this with IP whitelisting will adequately secure the server.
