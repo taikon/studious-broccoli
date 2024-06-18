@@ -11,8 +11,11 @@ import Collaboration from '@tiptap/extension-collaboration'
 
 import { TiptapCollabProvider } from '@hocuspocus/provider'
 
-import {Button} from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import { Toaster, toast } from "sonner";
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import './App.css'
 
 function App() {
   function handleClear() {
@@ -69,6 +72,11 @@ function App() {
 
     if (!editor) {
       return
+    }
+
+    if (files.length === 0) {
+      toast.error("No files selected");
+      return;
     }
 
     toast.info("Processing data");
@@ -129,57 +137,57 @@ function App() {
     `,
   })
 
-  function handleResetContent() {
+  function handleResetFiles() {
     if (!editor) {
       return
     }
 
-    editor.commands.setContent('Hello World')
+    setFiles([]);
   }
 
   if (editor) {
     return (
       <>
-        <div className="hidden h-full flex-col md:flex">
+        <div className="h-full flex-col md:flex">
           <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
-            <h2 className="text-lg font-semibold">Application</h2>
+            <h2 className="text-lg font-semibold">Assist</h2>
             <div className="ml-auto flex w-full space-x-2 sm:justify-end">
               <Button onClick={handleClear}>Clear</Button>
-              <Button onClick={handleResetContent}>Set Content</Button>
-            </div>
-          </div>
-
-          {/* <div className="flex-1 py-16"> */}
-          {/*   <div className="container h-full py-6"> */}
-          {/*     <FileUploadDropzone /> */}
-          {/*   </div> */}
-          {/* </div> */}
-
-          <div className="flex-1 py-16">
-            <div className="container h-full py-6">
-
-              <div>
-                <form onSubmit={handleSubmit}>
-                  <input type="file" multiple onChange={handleFileChange} />
-                  <Button type="submit">Upload</Button>
-                </form>
-                {files.length > 0 && (
-                  <div>
-                    <ul>
-                      {files.map((file) => (
-                        <li key={file.name}>{file.name}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-
+              <Button onClick={handleResetFiles}>Reset Files</Button>
             </div>
           </div>
 
           <div className="flex-1">
             <div className="container h-full py-6">
-              <EditorContent editor={editor} className='ring-1 ring-gray-500 rounded-lg lg:h-[500px] md:h-[500px] sm:h-[300px] h-[300px]' />
+
+              <form onSubmit={handleSubmit}>
+                <Label className='pl-1'>Upload files</Label>
+                <div className="flex w-full max-w-sm items-center space-x-2 cursor-pointer">
+                  <Input 
+                    type="file" 
+                    multiple 
+                    accept='image/*'
+                    onChange={handleFileChange} 
+                    className='hover:bg-neutral-100 outline-dashed outline-1 outline-white rounded-lg cursor-pointer'
+                  />
+                  <Button type="submit">Summarize</Button>
+                </div>
+              </form>
+              {files.length > 0 && (
+                <div>
+                  <ul>
+                    {files.map((file) => (
+                      <li key={file.name}>{file.name}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex-1">
+            <div className="container h-full py-6">
+              <EditorContent editor={editor} />
             </div>
           </div>
         </div>
