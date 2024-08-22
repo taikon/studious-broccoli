@@ -3,6 +3,7 @@
 ### Introduction
 - There are 2 directories in this project, `frontend` and `backend`.
 - The backend requires the `ollama` CLI tool to serve llama3 7B.
+- This application can be entirely self-hosted. Meaning that you can use it on your clinic's WiFi.
 
 ### Overview
 - `frontend/`: React frontend.
@@ -112,6 +113,16 @@
   ```
 
 - Go to `dashboard.<domain-name>.com`. The backend is hosted at `api.<domain-name>.com`.
+- Allow 30-60 seconds for the application to load the first time you use the application or after restarting. This delay happens because the LLM must be loaded into memory.
+- You can also load the LLM into memory prior to using the application.
+- To do this, go to `api.<domain-name>.com/docs#/default/healthcheck_healthcheck_get`. Click "Try it out"  then click "Execute". When you see "ok" in the "Response body", the LLM has been loaded into memory.
+
+### Usage
+1. Go to `dashboard.<domain-name>.com` on your phone and login.
+2. Click "Choose Files". This opens the default camera on your phone.
+3. Take photos of the patient intake forms.
+4. On your work computer, go to `dashboard.<domain-name>.com` and login.
+5. The application will write a chart note using the patient intake forms. You can copy this form into your own EMR.
 
 ### Restarting Application
 - This section requires you to have already run through [Getting Started](getting-started) at least once.
