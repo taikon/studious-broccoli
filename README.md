@@ -88,9 +88,14 @@
   vim .env
   ```
   - Set `VITE_FASTAPI_SERVER_API_BASE_URL` to `https://api.<domain-name>.com`.
-  - Set `VITE_TIPTAP_JWT` to the "Authentication" value in Tiptap dashboard settings.
-  - Set `VITE_TIPTAP_COLLAB_APP_ID` to the "App ID" in the Tiptap dashboard.
   - Set `VITE_FASTAPI_SERVER_ACCESS_TOKEN` to `ACCESS_TOKEN` from `backend/.env`.
+  - Set `VITE_TIPTAP_JWT` to the "Authentication" value in Tiptap dashboard settings.
+    - Find this at [Tiptap Collaboration Settings](cloud.tiptap.dev/apps/settings)
+    - Then look under "Authentication"
+    - Copy the value from "JWT (auto generated for testing)"
+  - Set `VITE_TIPTAP_COLLAB_APP_ID` to the "App ID" in the Tiptap dashboard.
+    - This is the [Tiptap Collaboration Dashboard](cloud.tiptap.dev/apps) App ID.
+    - It's NOT [Tiptap Convert Document](cloud.tiptap.dev/convert-settings) App ID!
 
 - Install dependencies.
   ```bash
