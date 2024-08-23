@@ -118,9 +118,10 @@ function Home() {
   const doc = new Y.Doc() 
 
   // Connect to your Collaboration server
+  // `name` must either begin with 'doc_' or be 'document.name'
   // @ts-ignore
   const provider = new TiptapCollabProvider({ 
-    name: userId || 'document.name',
+    name: `doc_${userId}` || 'document.name',
     appId: import.meta.env.VITE_TIPTAP_COLLAB_APP_ID, 
     token: import.meta.env.VITE_TIPTAP_JWT,
     document: doc,
